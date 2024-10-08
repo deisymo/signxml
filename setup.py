@@ -3,9 +3,9 @@
 from setuptools import find_packages, setup
 
 setup(
-    name="signxml",
-    version="4.0.2",
-    url="https://github.com/kislyuk/signxml",
+    name="signxml-references-modified",
+    version="1.0.0",
+    url="https://github.com/deisymo/signxml",
     license="Apache Software License",
     author="Andrey Kislyuk",
     author_email="kislyuk@gmail.com",

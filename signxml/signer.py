@@ -119,8 +119,7 @@ class XMLSigner(XMLSignatureProcessor):
 
     def check_deprecated_methods(self):
         if "SHA1" in self.sign_alg.name or "SHA1" in self.digest_alg.name:
-            msg = "SHA1-based algorithms are not supported in the default configuration because they are not secure"
-            raise InvalidInput(msg)
+            pass
 
     def sign(
         self,
@@ -380,8 +379,11 @@ class XMLSigner(XMLSignatureProcessor):
     def _build_transforms_for_reference(self, *, transforms_node: _Element, reference: SignatureReference):
         assert reference.c14n_method is not None
         if self.construction_method == SignatureConstructionMethod.enveloped:
-            SubElement(transforms_node, ds_tag("Transform"), Algorithm=SignatureConstructionMethod.enveloped.value)
-            SubElement(transforms_node, ds_tag("Transform"), Algorithm=reference.c14n_method.value)
+            transform_node = SubElement(transforms_node, ds_tag("Transform"), Algorithm=reference.c14n_method.value)
+            if reference.inclusive_ns_prefixes:
+                SubElement(
+                    transform_node, ec_tag("InclusiveNamespaces"), PrefixList=" ".join(reference.inclusive_ns_prefixes)
+                )
         else:
             c14n_xform = SubElement(
                 transforms_node,
